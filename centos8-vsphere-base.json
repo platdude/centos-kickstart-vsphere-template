@@ -1,0 +1,64 @@
+{
+    "variables": {
+        "vcenter_server":      "{{env `VCENTER_SERVER`}}",
+        "username":            "{{env `VCENTER_USERNAME`}}",
+        "password":            "{{env `VCENTER_PASSWORD`}}",
+        "host":                "{{env `VCENTER_HOST`}}",
+        "datastore":           "{{env `VCENTER_DATASTORE`}}",
+        "network":             "{{env `VCENTER_NETWORK`}}",
+        "insecure_connection": "true"
+    },
+    "builders": [
+    {
+        "type": "vsphere-iso",  
+        "vcenter_server":      "{{user `vcenter_server`}}",
+        "username":            "{{user `username`}}",
+        "password":            "{{user `password`}}",
+        "insecure_connection": "true",
+
+        "vm_name": "template-centos8-base",
+        "folder": "TEMPLATES",
+        "cluster": "ha-dc",
+        "host": "{{user `host`}}",
+        "datastore": "{{user `datastore`}}",
+        "vm_version": 13,
+        "CPUs": 1,
+        "RAM": 1024,
+        "guest_os_type": "centos7_64Guest",
+        "firmware": "bios",
+        "storage": [
+            {
+                "disk_size": 25600,
+                "disk_thin_provisioned": true
+            }
+        ],
+        "network_adapters": [
+            {
+                "network": "{{user `network`}}",
+                "network_card": "vmxnet3"
+            }
+        ],
+        "ssh_username": "provision",
+        "ssh_private_key_file": "~/.ssh/provision-rsa",
+        "ssh_timeout": "5m",
+ 
+        "iso_checksum": "3ee3f4ea1538e026fff763e2b284a6f20b259d91d1ad5688f5783a67d279423b",
+        "iso_urls": [
+            "http://mirror.ox.ac.uk/sites/mirror.centos.org/8.1.1911/isos/x86_64/CentOS-8.1.1911-x86_64-dvd1.iso",
+            "http://mirror.cwcs.co.uk/centos/8.1.1911/isos/x86_64/CentOS-8.1.1911-x86_64-dvd1.iso",
+            "http://mirrors.ukfast.co.uk/sites/ftp.centos.org/8.1.1911/isos/x86_64/CentOS-8.1.1911-x86_64-dvd1.iso"
+        ],
+        "boot_command": "<tab> inst.text inst.ks=https://raw.githubusercontent.com/dnsandfunops/centos-kickstart-vsphere-template/master/anaconda-ks8.cfg <enter><wait>",
+
+        "export": {
+            "force": true,
+            "output_directory": "./output_vsphere",
+            "images": false,
+            "manifest": "sha256"           
+        },
+  
+        "convert_to_template": true       
+    }
+    ]
+}
+  
