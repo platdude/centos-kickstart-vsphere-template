@@ -47,7 +47,7 @@ Revise centos-vsphere-base.json and adjust parameters to suit your needs: disk_s
 
 Adjust a few things on file anaconda-ks.cfg base on your own needs. Some guidance below:
 
-- Insert your own cncrypted password for the bootloader
+- Insert your own encrypted password for the bootloader
 - Adjust the partitioning as per your needs
 - Arrange the repos you want configured by default on your template
 - Adjust the provision user's ssh key (this user should be stripped later on by your configuration management tool: Ansible, Chef...)
